@@ -8,11 +8,17 @@ const authVerify = (req: Request, res: Response, next: NextFunction) => {
     req.headers["Authorization"] || req.headers["authorization"];
 
   if (!token) {
-    return res.status(401).json({ message: "Error: No Token" });
+    return res.status(401).json({
+      code: res.statusCode,
+      message: "User is not authorized to access this resource.",
+    });
   }
 
   if (token.indexOf("Bearer") !== 0) {
-    return res.status(401).json({ message: "Error: Token format invalid" });
+    return res.status(401).json({
+      code: res.statusCode,
+      message: "Error: Token format invalid",
+    });
   }
 
   const tokenString = token.split(" ")[1];
@@ -24,10 +30,14 @@ const authVerify = (req: Request, res: Response, next: NextFunction) => {
     );
 
     if (!decodedToken.role) {
-      return res.status(401).json({ message: "Error: Role missing" });
+      return res.status(401).json({
+        code: res.statusCode,
+        message: "Error: Role missing",
+      });
     }
 
-    const userRole: string = decodedToken.role;
+    res.locals.role = decodedToken.role;
+    res.locals.id = decodedToken.id;
     // if (roles.indexOf(userRole) === -1) {
     //   return res.status(401).json({ message: "Error: User not authorized" });
     // }
@@ -36,7 +46,10 @@ const authVerify = (req: Request, res: Response, next: NextFunction) => {
     next();
   } catch (err) {
     console.log(err);
-    return res.status(401).json({ message: "Error: Broken or expired token" });
+    return res.status(401).json({
+      code: res.statusCode,
+      message: "Error: Broken or expired token",
+    });
   }
 };
 

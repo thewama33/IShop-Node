@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import userModel, { IUser } from "../model/userModel";
+import UserModel from "../model/user.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -14,7 +14,7 @@ export async function login(req: Request, res: Response) {
       });
     }
 
-    const user = await userModel.findOne({
+    const user = await UserModel.findOne({
       email: email,
     });
 
@@ -24,7 +24,7 @@ export async function login(req: Request, res: Response) {
       const token: string = jwt.sign(
         { id: user.id, email: user.email, role: user.role },
         String(process.env.JWT_SECRET),
-        { expiresIn: "1m" }
+        { expiresIn: "15m" }
       );
       return res.status(200).json({
         code: res.statusCode,
@@ -38,7 +38,7 @@ export async function login(req: Request, res: Response) {
       message: "Invalid Email or Password",
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       code: res.statusCode,
       message: "Internal Server Error",
       error,
@@ -47,6 +47,7 @@ export async function login(req: Request, res: Response) {
 }
 export async function register(req: Request, res: Response) {
   const { firstName, lastName, email, password, role } = req.body;
+  const { city, country, address, zipcode, lat, long } = req.body.addresses;
   try {
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({
@@ -57,10 +58,11 @@ export async function register(req: Request, res: Response) {
 
     const hashedPassword: string = await bcrypt.hash(password, 10);
 
-    const user = await userModel.create({
+    const user = await UserModel.create({
       firstName,
       lastName,
       email,
+      addresses: [...Object.values(req.body.addresses)],
       password: hashedPassword,
       role,
     });

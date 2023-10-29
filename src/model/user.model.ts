@@ -7,15 +7,17 @@ export interface IUser {
   lastName: string;
   email: string;
   password: string;
-  role: number;
+  role: role;
   createdAt: Date;
   updatedAt: Date;
+  addresses: Schema.Types.ObjectId[];
+  orders: Schema.Types.ObjectId[]; // Array of order IDs
 }
 
 enum role {
-  Standard,
-  Vendor,
-  Admin,
+  Standard = "Standard",
+  Vendor = "Vendor",
+  Admin = "Admin",
 }
 
 const userSchema = new Schema<IUser>({
@@ -34,17 +36,23 @@ const userSchema = new Schema<IUser>({
     lowercase: true,
     validate: [validator.isEmail, "Email is not valid"],
   },
+  addresses: [{ type: Schema.Types.ObjectId, ref: "Address" }],
   password: {
     type: String,
     required: [true, "Password is required"],
     minlength: 8,
     validate: [validator.isStrongPassword, "Password is weak "],
   },
+  createdAt: { type: Date, default: Date.now() },
+  updatedAt: { type: Date, default: Date.now() },
+  orders: { type: [Schema.Types.ObjectId], ref: "Orders" },
   role: {
-    type: Number,
-    enum: role,
+    type: String,
+    enum: Object.values(role),
     default: role.Standard,
   },
 });
 
-export default model<IUser>("users", userSchema);
+const UserModel = model<IUser>("Users", userSchema);
+
+export default UserModel;
