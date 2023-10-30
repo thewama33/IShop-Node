@@ -1,6 +1,6 @@
-import { model, Schema, Document } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
-interface IUserAddress {
+interface IUserAddress extends Document {
   city: string;
   country: string;
   address: string;
@@ -19,6 +19,6 @@ const userAddress: Schema = new Schema<IUserAddress>({
   user: { type: Schema.Types.ObjectId, ref: "Users" }, // Reference to the User model
 });
 
-const UserAddress = model<IUserAddress>("Address", userAddress);
+const AddressModel = model<IUserAddress>("Address", userAddress);
 
-export default UserAddress;
+export default AddressModel;

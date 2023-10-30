@@ -24,7 +24,7 @@ export async function login(req: Request, res: Response) {
       const token: string = jwt.sign(
         { id: user.id, email: user.email, role: user.role },
         String(process.env.JWT_SECRET),
-        { expiresIn: "15m" }
+        { expiresIn: "1d" }
       );
       return res.status(200).json({
         code: res.statusCode,
@@ -47,7 +47,6 @@ export async function login(req: Request, res: Response) {
 }
 export async function register(req: Request, res: Response) {
   const { firstName, lastName, email, password, role } = req.body;
-  const { city, country, address, zipcode, lat, long } = req.body.addresses;
   try {
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({
@@ -62,7 +61,6 @@ export async function register(req: Request, res: Response) {
       firstName,
       lastName,
       email,
-      addresses: [...Object.values(req.body.addresses)],
       password: hashedPassword,
       role,
     });

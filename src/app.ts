@@ -3,8 +3,12 @@ import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 import db from "./config/db";
+
 import authRoute from "./routes/auth.routes";
 import addressesRoute from "./routes/addresses.routes";
+import userRoute from "./routes/user.routes";
+import productsRoute from "./routes/products.routes";
+
 const app = express();
 
 // Middlewraes
@@ -15,8 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 //Routes
-app.use("/api", authRoute);
-app.use("/api", addressesRoute);
+app.use("/api", authRoute, addressesRoute, userRoute, productsRoute);
 
 // 404 NOT FOUND Handler
 app.all("*", (req: Request, res: Response) => {

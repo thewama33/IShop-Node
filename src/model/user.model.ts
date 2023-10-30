@@ -7,14 +7,12 @@ export interface IUser {
   lastName: string;
   email: string;
   password: string;
-  role: role;
+  role: Roles;
   createdAt: Date;
   updatedAt: Date;
-  addresses: Schema.Types.ObjectId[];
-  orders: Schema.Types.ObjectId[]; // Array of order IDs
 }
 
-enum role {
+export enum Roles {
   Standard = "Standard",
   Vendor = "Vendor",
   Admin = "Admin",
@@ -36,7 +34,6 @@ const userSchema = new Schema<IUser>({
     lowercase: true,
     validate: [validator.isEmail, "Email is not valid"],
   },
-  addresses: [{ type: Schema.Types.ObjectId, ref: "Address" }],
   password: {
     type: String,
     required: [true, "Password is required"],
@@ -45,11 +42,10 @@ const userSchema = new Schema<IUser>({
   },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date, default: Date.now() },
-  orders: { type: [Schema.Types.ObjectId], ref: "Orders" },
   role: {
     type: String,
-    enum: Object.values(role),
-    default: role.Standard,
+    enum: Object.values(Roles),
+    default: Roles.Standard,
   },
 });
 

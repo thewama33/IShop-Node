@@ -18,7 +18,7 @@ interface IOrders extends Document {
 
 const orderSchema: Schema = new Schema<IOrders>({
   user: { type: Schema.Types.ObjectId, ref: "Users" },
-  products: { types: Schema.Types.ObjectId, ref: "Products" },
+  products: [{ types: Schema.Types.ObjectId, ref: "Products" }],
   status: {
     type: String,
     enum: Object.values(OrderStatus),
