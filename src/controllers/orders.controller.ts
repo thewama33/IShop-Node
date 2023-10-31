@@ -1,9 +1,20 @@
 import { Request, Response } from "express";
-import OrderModel from "../model/orders.model";
 import { DefaultResponse } from "../helpers/defaultResponse";
+import OrderModel from "../model/orders.model";
 import UserModel from "../model/user.model";
 
-export async function getOrders(req: Request, res: Response) {
+export async function getAllOrders(req: Request, res: Response) {
+  try {
+    const orders = await OrderModel.find();
+    return res.status(200).json(DefaultResponse.success(orders));
+  } catch (err: any) {
+    return res
+      .status(500)
+      .json(DefaultResponse.error("Internal Server Error", res.statusCode));
+  }
+}
+
+export async function getUserOrders(req: Request, res: Response) {
   try {
     const orders = await OrderModel.find({ userid: res.locals.id });
     return res.status(200).json(DefaultResponse.success(orders));

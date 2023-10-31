@@ -1,10 +1,11 @@
 import { Router } from "express";
 import {
-  updateOrder,
   createOrder,
-  getOrders,
   deleteOrder,
   getOrderById,
+  getUserOrders,
+  getAllOrders,
+  updateOrder,
 } from "../controllers/orders.controller";
 import {
   authenticateUser,
@@ -24,6 +25,9 @@ router
 
 router.route("/order").post(createOrder);
 
-router.route("/orders").get(getOrders);
+router.route("/orders").get(getUserOrders);
+router
+  .route("/all-orders")
+  .get(authorizeUser([Roles.Admin, Roles.Vendor]), getAllOrders);
 
 export default router;
