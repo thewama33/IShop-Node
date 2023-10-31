@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { addAddress, getAddress } from "../controllers/address.controller";
-import authVerify from "../middlewares/auth.middleware";
-import { Roles } from "../model/user.model";
+import { authenticateUser } from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.use(authVerify);
+router.use(authenticateUser);
 router.route("/addresses").get(getAddress).post(addAddress).put().delete();
 
 export default router;

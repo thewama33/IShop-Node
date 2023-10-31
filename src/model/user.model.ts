@@ -2,10 +2,10 @@ import { Schema, model } from "mongoose";
 import validator from "validator";
 
 export interface IUser {
-  id: string;
   firstName: string;
   lastName: string;
   email: string;
+  phone: string;
   password: string;
   role: Roles;
   createdAt: Date;
@@ -21,11 +21,17 @@ export enum Roles {
 const userSchema = new Schema<IUser>({
   firstName: {
     type: String,
-    required: [true, "Firstname is required"],
+    required: [true, "First Name is required"],
   },
   lastName: {
     type: String,
-    required: [true, "Lastname is required"],
+    required: [true, "Last Name is required"],
+  },
+  phone: {
+    type: String,
+    required: [true, "Phone Number is required"],
+    unique: true,
+    validate: [validator.isMobilePhone, "Phone Number is not valid"],
   },
   email: {
     type: String,

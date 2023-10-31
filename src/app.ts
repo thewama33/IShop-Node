@@ -8,18 +8,28 @@ import authRoute from "./routes/auth.routes";
 import addressesRoute from "./routes/addresses.routes";
 import userRoute from "./routes/user.routes";
 import productsRoute from "./routes/products.routes";
+import categoriesRoute from "./routes/category.routes";
+import ordersRoute from "./routes/orders.routes";
 
 const app = express();
 
 // Middlewraes
-app.use(morgan("common"));
+app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 //Routes
-app.use("/api", authRoute, addressesRoute, userRoute, productsRoute);
+app.use(
+  "/api",
+  authRoute,
+  addressesRoute,
+  userRoute,
+  productsRoute,
+  categoriesRoute,
+  ordersRoute
+);
 
 // 404 NOT FOUND Handler
 app.all("*", (req: Request, res: Response) => {

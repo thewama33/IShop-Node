@@ -1,14 +1,14 @@
 import { Router } from "express";
-import authVerify from "../middlewares/auth.middleware";
 import {
   deleteUser,
   getUserById,
   updateUser,
 } from "../controllers/user.controller";
+import { authenticateUser } from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.use(authVerify);
+router.use(authenticateUser);
 
 router
   .route("/user")

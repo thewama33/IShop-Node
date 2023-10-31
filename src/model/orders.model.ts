@@ -1,4 +1,5 @@
 import { model, Schema, Document } from "mongoose";
+import { IProduct } from "./products.model"; // Import the IProduct interface
 
 enum OrderStatus {
   PENDING = "Pending",
@@ -8,17 +9,17 @@ enum OrderStatus {
   CANCELLED = "Cancelled",
 }
 
-interface IOrders extends Document {
-  user: Schema.Types.ObjectId;
-  products: Schema.Types.ObjectId[];
+export interface IOrders extends Document {
+  userid: Schema.Types.ObjectId;
+  //products: Schema.Types.ObjectId[] | IProduct[];  // Use IProduct[] for reference to Products model
   status: OrderStatus; // Order status field with enum values
   createdAt: Date;
   updatedAt: Date;
 }
 
 const orderSchema: Schema = new Schema<IOrders>({
-  user: { type: Schema.Types.ObjectId, ref: "Users" },
-  products: [{ types: Schema.Types.ObjectId, ref: "Products" }],
+  userid: { type: Schema.Types.ObjectId, ref: "Users" },
+  //products: [{ types: Schema.Types.ObjectId, ref: "Products" }],
   status: {
     type: String,
     enum: Object.values(OrderStatus),

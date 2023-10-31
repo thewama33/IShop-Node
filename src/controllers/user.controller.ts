@@ -40,11 +40,11 @@ export async function getUserById(req: Request, res: Response) {
 // Update a user by ID
 export async function updateUser(req: Request, res: Response) {
   const userId = res.locals.id;
-  const { firstName, lastName, email } = req.body;
+  const { firstName, lastName, email,phone } = req.body;
   try {
     const user = await UserModel.findByIdAndUpdate(
       userId,
-      { firstName, lastName, email, updatedAt: Date.now() },
+      { firstName, lastName, email, phone, updatedAt: Date.now() },
       {
         new: true,
       }

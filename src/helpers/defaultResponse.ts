@@ -32,8 +32,13 @@ class DefaultResponse {
     return new DefaultResponse(undefined, undefined, status, message);
   }
 
-  static notFound(): DefaultResponse {
-    return new DefaultResponse(undefined, undefined, 404, "Not Found");
+  static notFound(message?: string): DefaultResponse {
+    return new DefaultResponse(
+      undefined,
+      undefined,
+      404,
+      !message ? "Not Found" : message
+    );
   }
 }
 

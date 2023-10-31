@@ -46,9 +46,9 @@ export async function login(req: Request, res: Response) {
   }
 }
 export async function register(req: Request, res: Response) {
-  const { firstName, lastName, email, password, role } = req.body;
+  const { firstName, lastName, email, password, phone, role } = req.body;
   try {
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !phone) {
       return res.status(400).json({
         code: res.statusCode,
         message: "All Inputs Required",
@@ -61,6 +61,7 @@ export async function register(req: Request, res: Response) {
       firstName,
       lastName,
       email,
+      phone,
       password: hashedPassword,
       role,
     });
